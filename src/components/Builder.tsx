@@ -1,0 +1,156 @@
+import { useState, type JSX } from 'react'
+import Edition from './step/Edition'
+import Classes from './step/Classes'
+import * as Type from '@/types'
+import { StepsContext } from '@/structure/Context'
+import { useImmer } from 'use-immer'
+
+export default function Builder() {
+  const edition = useImmer<Type.EditionStep>({
+    id: 'edition',
+    name: '规则版本',
+    status: 'incomplete',
+    value: {
+      expansions: [],
+    }
+  })
+
+  const classes = useImmer<Type.ClassesStep>({
+    id: 'classes',
+    name: '职业',
+    value: {
+      classes: [],
+    }
+  })
+
+  const subclasses = useImmer<Type.SubclassesStep>({
+    id: 'subclasses',
+    name: '子职业',
+    value: {
+      subclasses: {},
+    }
+  })
+
+  const species = useImmer<Type.SpeciesStep>({
+    id: 'species',
+    name: '种族',
+    value: {
+      options: {},
+    }
+  })
+
+  const ability = useImmer<Type.AbilityStep>({
+    id: 'ability',
+    name: '属性值',
+    value: {},
+  })
+
+  const feat = useImmer<Type.FeatStep>({
+    id: 'feat',
+    name: '专长',
+    value: {
+      feats: {},
+    }
+  })
+
+  const background = useImmer<Type.BackgroundStep>({
+    id: 'background',
+    name: '背景',
+    value: {},
+  })
+
+  const equipments = useImmer<Type.EquipmentsStep>({
+    id: 'equipment',
+    name: '装备',
+    value: {
+      weapons: {},
+      armors: {},
+      tools: {},
+      coins: {},
+    }
+  })
+
+  const skills = useImmer<Type.SkillsStep>({
+    id: 'skills',
+    name: '技能',
+    value: {
+      languages: {},
+      weapons: {},
+      armors: {},
+      tools: {},
+      saving: {},
+      skillProficiencies: {},
+      skillExpertise: {},
+    },
+  })
+
+  const about = useImmer<Type.AboutStep>({
+    id: 'about',
+    name: '角色信息',
+    value: {},
+  })
+
+  const steps = [
+    edition[0],
+    classes[0],
+    subclasses[0],
+    species[0],
+    ability[0],
+    feat[0],
+    background[0],
+    equipments[0],
+    skills[0],
+    about[0],
+  ] as const
+
+  const [ step, setStep ] = useState('edition')
+
+  function Main(): JSX.Element | undefined {
+    switch (step) {
+      case 'edition':
+        return <Edition />
+      case 'classes':
+        return <Classes />
+      case 'subclasses':
+      case 'species':
+      case 'ability':
+      case 'feat':
+      case 'background':
+      case 'skills':
+      case 'about':
+    }
+  }
+
+  return <>
+    <div className="builder-header">
+      {steps.find(v => v.id === step)?.name || ''}
+    </div>
+    <div className="builder-main">
+      <StepsContext.Provider value={{
+        edition,
+        classes,
+        subclasses,
+        species,
+        ability,
+        feat,
+        background,
+        equipments,
+        skills,
+        about
+      }}>
+        { Main() }
+      </StepsContext.Provider>
+    </div>
+    <div className="builder-navigation">
+      {
+        steps.filter(v => v.status).map(v => (
+          <span key={v.id} className={`step-item ${v.id === step ? 'active' : ''}`} onClick={() => setStep(v.id)}>
+            {v.name}&nbsp;
+          </span>
+        ))
+      }
+      <div onClick={() => setStep(steps[steps.findIndex(v => v.id === step) + 1]?.id || step)}>下一项</div>
+
+    </div>
+  </>
+}

@@ -1,0 +1,11 @@
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.builder-header {
+  margin: 20px 30px;
+  height: 50px;
+}
