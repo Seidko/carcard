@@ -4,6 +4,8 @@ import Classes from './step/Classes'
 import * as Type from '@/types'
 import { StepsContext } from '@/structure/Context'
 import { useImmer } from 'use-immer'
+import { Subclasses } from './step/Subclasses'
+import Species from './step/Species'
 
 export default function Builder() {
   const edition = useImmer<Type.EditionStep>({
@@ -25,7 +27,7 @@ export default function Builder() {
 
   const subclasses = useImmer<Type.SubclassesStep>({
     id: 'subclasses',
-    name: '子职业',
+    name: '子职',
     value: {
       subclasses: {},
     }
@@ -112,7 +114,9 @@ export default function Builder() {
       case 'classes':
         return <Classes />
       case 'subclasses':
+        return <Subclasses />
       case 'species':
+        return <Species />
       case 'ability':
       case 'feat':
       case 'background':

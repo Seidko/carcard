@@ -1,7 +1,7 @@
 import { StepsContext } from '@/structure/Context'
 import { classesData } from '@/data/classes'
 import type { Class } from '@/types'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useContextSelector } from 'use-context-selector'
 import { isClassHasFeatureAtLevel, isCompAvailable } from '@/utils'
 
@@ -9,7 +9,7 @@ export default function Classes() {
   const [ edition, classes, setClasses, setSubclasses ] = useContextSelector(StepsContext, s => [s.edition[0], ...s.classes, s.subclasses[1] ])
   const [ newClass, setNewClass ] = useState<boolean>(false)
 
-  const classesDataFiltered = classesData.filter(v => isCompAvailable(v, edition))
+  const classesDataFiltered = useMemo(() => classesData.filter(c => isCompAvailable(c, edition)), [edition])
 
   useEffect(() => {
     if (classes.value.classes.some(c => isClassHasFeatureAtLevel(classesDataFiltered.find(v => v.id === c.id)!, c.level, 'subclass'))) {

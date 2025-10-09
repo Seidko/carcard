@@ -1,5 +1,5 @@
 import { StepsContext } from '@/structure/Context'
-import type { AboutStep, ClassesStep, SkillsStep, SpeciesStep } from '@/types'
+import type { StepBase } from '@/types'
 import type { WritableDraft } from 'immer'
 import React from 'react'
 import { useContextSelector } from 'use-context-selector'
@@ -10,6 +10,7 @@ export default function Edition() {
       s.edition[0],
       s.edition[1],
       s.classes[1],
+      s.ability[1],
       s.species[1],
       s.skills[1],
       s.about[1],
@@ -19,7 +20,7 @@ export default function Edition() {
   const editionButton = (e: string, expansion: string) => {
     return () => {
       if (!edition.value.edition) {
-        setters.forEach(set => set((state: WritableDraft<ClassesStep | SpeciesStep | SkillsStep | AboutStep>) => {
+        setters.forEach(set => set((state: WritableDraft<StepBase>) => {
           state.status = 'not opened'
         }))
       }

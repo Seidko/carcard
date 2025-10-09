@@ -3,7 +3,7 @@ import { useContextSelector } from 'use-context-selector'
 import { classesData } from '@/data/classes'
 import { subclassesData } from '@/data/subclasses'
 import { isCompAvailable } from '@/utils'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 export function Subclasses() {
   const [edition, classes, subclasses, setSubclasses] = useContextSelector(StepsContext, v => [
@@ -12,8 +12,8 @@ export function Subclasses() {
     ...v.subclasses,
   ])
 
-  const classesDataFiltered = classesData.filter(v => isCompAvailable(v, edition))
-  const subclassesDataFiltered = subclassesData.filter(v => isCompAvailable(v, edition))
+  const classesDataFiltered = useMemo(() => classesData.filter(c => isCompAvailable(c, edition)), [edition])
+  const subclassesDataFiltered = useMemo(() => subclassesData.filter(s => isCompAvailable(s, edition)), [edition])
 
   function SubclassChoice({ classId }: { classId: string }) {
     const classData = classesDataFiltered.find(c => c.id === classId)

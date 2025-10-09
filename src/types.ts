@@ -57,6 +57,7 @@ export interface SpeciesStep extends StepBase {
 export interface AbilityStep extends StepBase {
   id: 'ability'
   value: {
+    type?: 'standard' | 'point buy' | 'dnd5' | 'custom'
     base?: NTuple6
   } & FromOptions<NTuple6>
 }
