@@ -39,26 +39,33 @@ const rPointCosts: Record<string, number> = {
 
 function ArrayChoice({ index, array }: { index: number, array: NTuple6 }) {
   const [ ability, setAbility ] = useContextSelector(StepsContext, s => [...s.ability])
+  const [ alertVisible, setAlertVisible ] = useState(false)
 
   const option = Array.from(new Set(array))
 
   return <>
-    <select value={ability.value.base?.[index] ?? ''} onChange={e => setAbility(s => {
-      if (!s.value.base) s.value.base = Array(6).fill(undefined) as NTuple6
+    <select value={ability.value.base?.[index] ?? ''} onChange={e => {
       const value = Number(e.target.value)
       
       const arrCounts = countItem(array)
-      const attrCount = s.value.base?.filter(v => v === value).length + 1
+      const attrCount = (ability.value.base?.filter(v => v === value).length ?? 0) + 1
       
       if (arrCounts.get(value)! < attrCount) {
+        setAlertVisible(true)
+        setTimeout(() => setAlertVisible(false), 2000)
         return
       }
 
-      s.value.base[index] = value
-    })}>
+      setAbility(s => {
+        if (!s.value.base) s.value.base = Array(6).fill(undefined) as NTuple6
+
+        s.value.base[index] = value
+      })}
+    }>
       <option value="" hidden>请选择</option>
       {option.map((v, i) => <option key={i} value={v}>{v}</option>)}
     </select>
+    {alertVisible && <span style={{ color: 'red' }}>选择的值超过限制！</span>}
   </>
 }
 
