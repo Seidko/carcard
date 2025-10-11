@@ -21,6 +21,7 @@ export default function Classes() {
         s.status = undefined
       })
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classes])
 
   function ClassChoice({ cb }: { cb: (id: string) => void }) {

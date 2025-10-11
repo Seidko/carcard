@@ -62,7 +62,10 @@ export interface AbilityStep extends StepBase {
       selected: number
     }
     base?: Partial<NTuple6>
-  } & FromOptions<NTuple6>
+  } & FromOptions<{
+    unbound: boolean
+    value: NTuple6
+  }>
 }
 
 export interface FeatStep extends StepBase {

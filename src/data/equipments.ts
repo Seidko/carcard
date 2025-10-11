@@ -32,6 +32,14 @@ export interface Tools {
   description?: string
 }
 
+export interface Equipments {
+  armors?: string[]
+  weapons?: string[]
+  tools?: string[]
+  coins?: Coins
+  other?: string[]
+}
+
 export const weapons: Weapon[] = [
   {
     id: 'club',

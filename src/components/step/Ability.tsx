@@ -1,3 +1,4 @@
+import { backgroundsData } from '@/data/background'
 import { StepsContext } from "@/structure/Context";
 import type { Ability, NTuple6 } from '@/types'
 import { countItem, rollDice } from '@/utils'
@@ -131,6 +132,61 @@ function PointRolling() {
   </div>
 }
 
+function BackgroundBonus() {
+  const [bgStep, ability, setAbility] = useContextSelector(StepsContext, s => [s.background[0], ...s.ability])
+  const bg = backgroundsData.find(b => b.id === bgStep.value.background)
+  const bgAbility = ability.value.background
+
+  const unboundCheckBox = <label>
+    <input type="checkbox" checked={bgAbility?.unbound || false} onChange={e => setAbility(s => {
+      if (!s.value.background) s.value.background = { unbound: false, value: Array(6).fill(0) as NTuple6 }
+      s.value.background.unbound = e.target.checked
+      if (!e.target.checked) {
+        s.value.background.value = Array(6).fill(0) as NTuple6
+      }
+    })} />
+    允许自由分配加值
+  </label>
+
+  function bgInput(i: number) {
+    const remain = 3 - (bgAbility?.value.reduce((a, b) => a + b, 0) ?? 0) + (bgAbility?.value[i] ?? 0)
+    
+    return <input type="number" min={0} max={Math.min(2, remain)} value={bgAbility?.value[i] ?? 0} onChange={ e => setAbility(s => {
+      if (!s.value.background) s.value.background = { unbound: false, value: Array(6).fill(0) as NTuple6 }
+      s.value.background.value[i] = Math.min(2, Math.max(0, Number(e.target.value)))
+    })} />
+  }
+
+  if (bgAbility?.unbound) {
+    return <div>
+      自由分配加值（最多3点）：
+      <div>{unboundCheckBox}</div>
+      { abilityData.map((v, i) => (
+        <div key={i}>
+          {v.name}
+          {bgInput(i)}
+        </div>
+      )) }
+    </div>
+  }
+
+  if (!bg) return <><div>未选择背景</div>{unboundCheckBox}</>
+
+  
+  return <div>
+    来自背景 {bg.name} 的加值：
+    { bg.ability.map((v, i) => {
+      if (!bgAbility?.unbound && v === 0) return
+      
+      return <div key={i}>
+        {abilityData[i].name}
+        { bgInput(i) }
+      </div>
+    }) }
+    {unboundCheckBox}
+  </div>
+}
+
 export default function Ability() {
   const [ ability, setAbility ] = useContextSelector(StepsContext, s => [...s.ability])
   
@@ -222,5 +278,6 @@ export default function Ability() {
       <option value="custom">自定义</option>
     </select>
     {renderwithType(ability.value.type)}
+    <BackgroundBonus />
   </>
 }

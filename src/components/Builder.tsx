@@ -7,6 +7,8 @@ import Species from './step/Species'
 import Edition from './step/Edition'
 import Classes from './step/Classes'
 import Ability from './step/Ability'
+import Feats from './step/Feats'
+import Background from './step/Background'
 
 export default function Builder() {
   const edition = useImmer<Type.EditionStep>({
@@ -108,7 +110,7 @@ export default function Builder() {
 
   const [ step, setStep ] = useState('edition')
 
-  function Main(): JSX.Element | undefined {
+  function main(): JSX.Element | undefined {
     switch (step) {
       case 'edition':
         return <Edition />
@@ -121,7 +123,9 @@ export default function Builder() {
       case 'ability':
         return <Ability />
       case 'feat':
+        return <Feats />
       case 'background':
+        return <Background />
       case 'skills':
       case 'about':
     }
@@ -144,7 +148,7 @@ export default function Builder() {
         skills,
         about
       }}>
-        { Main() }
+        { main() }
       </StepsContext.Provider>
     </div>
     <div className="builder-navigation">
