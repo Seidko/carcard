@@ -49,7 +49,6 @@ export interface SpeciesStep extends StepBase {
   id: 'species'
   value: {
     species?: string
-    // eslint-disable-next-line
     options: any
   }
 }
@@ -57,8 +56,12 @@ export interface SpeciesStep extends StepBase {
 export interface AbilityStep extends StepBase {
   id: 'ability'
   value: {
-    type?: 'standard' | 'point buy' | 'dnd5' | 'custom'
-    base?: NTuple6
+    type?: 'standard' | 'point buy' | 'rolling point' | 'custom'
+    rolls?: {
+      results: NTuple6[]
+      selected: number
+    }
+    base?: Partial<NTuple6>
   } & FromOptions<NTuple6>
 }
 
@@ -146,3 +149,5 @@ export interface Feat {
 export type FeatType = 'origin' | 'general' | 'fighting style' | 'epic boon'
 
 export type Spellcasting = 'full' | 'half' | 'third' | 'pact' | 'none'
+
+export type Ability = 'str' | 'dex' | 'con' | 'int' | 'wis' | 'cha'

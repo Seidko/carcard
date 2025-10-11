@@ -1,11 +1,12 @@
 import { useState, type JSX } from 'react'
-import Edition from './step/Edition'
-import Classes from './step/Classes'
 import * as Type from '@/types'
 import { StepsContext } from '@/structure/Context'
 import { useImmer } from 'use-immer'
 import { Subclasses } from './step/Subclasses'
 import Species from './step/Species'
+import Edition from './step/Edition'
+import Classes from './step/Classes'
+import Ability from './step/Ability'
 
 export default function Builder() {
   const edition = useImmer<Type.EditionStep>({
@@ -118,6 +119,7 @@ export default function Builder() {
       case 'species':
         return <Species />
       case 'ability':
+        return <Ability />
       case 'feat':
       case 'background':
       case 'skills':
