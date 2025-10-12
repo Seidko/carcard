@@ -3,6 +3,7 @@ import { StepsContext } from '@/structure/Context'
 import type { NTuple6 } from '@/types'
 import { isCompAvailable } from '@/utils'
 import { useMemo } from 'react'
+import Markdown from 'react-markdown'
 import { useContextSelector } from 'use-context-selector'
 
 export default function Background() {
@@ -32,7 +33,7 @@ export default function Background() {
     <div>→ 选择背景：</div>
     { selectedBg ? <>
         <div>背景：{ selectedBg.name || '未知背景' } </div>
-        <p>{selectedBg.description}</p>
+        <Markdown >{selectedBg.description}</Markdown>
         <div onClick={() => setBg(undefined)}>↻更换背景</div>
       </>
       : 
