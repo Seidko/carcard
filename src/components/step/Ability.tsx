@@ -175,21 +175,25 @@ function BackgroundBonus() {
   
   return <div>
     来自背景 {bg.name} 的加值：
-    { bg.ability.map((v, i) => {
-      if (!bgAbility?.unbound && v === 0) return
-      
-      return <div key={i}>
-        {abilityData[i].name}
-        { bgInput(i) }
-      </div>
-    }) }
+    { 
+      // maybe undefined but here is PHB2024 only
+      bg.ability!.map((v, i) => {
+        if (!bgAbility?.unbound && v === 0) return
+        
+        return <div key={i}>
+          {abilityData[i].name}
+          { bgInput(i) }
+        </div>
+      })
+    }
     {unboundCheckBox}
   </div>
 }
 
 export default function Ability() {
-  const [ ability, setAbility ] = useContextSelector(StepsContext, s => [...s.ability])
-  
+  const [ edtStep, ability, setAbility ] = useContextSelector(StepsContext, s => [ s.edition, ...s.ability])
+  const edition = edtStep[0].value.edition
+
   function renderwithType(type: string | undefined) {
     switch (type) {
       case "standard":
@@ -277,7 +281,7 @@ export default function Ability() {
       <option value="rolling point">掷骰点数法</option>
       <option value="custom">自定义</option>
     </select>
-    {renderwithType(ability.value.type)}
-    <BackgroundBonus />
+    { renderwithType(ability.value.type) }
+    { edition === '5e2024' && <BackgroundBonus /> }
   </>
 }

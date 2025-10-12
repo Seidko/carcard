@@ -670,19 +670,38 @@ export const otherTools: Tools[] = [
     description: '**属性：** 智力\n**重量：** 3磅\n**操作：** 辨认植物（DC10）\n**制造：** 抗毒剂、蜡烛、医疗包、治疗药水',
   },
   {
-    id: 'navigator\'s tools', 
+    id: 'navigator', 
     name: '领航工具',
     description: '**属性：** 感知\n**重量：** 2磅\n**操作：** 计划路线（DC10），或通过观星判断位置（DC15）',
   },
   {
-    id: 'poisoner\'s kit', 
+    id: 'poisoners tools', 
     name: '毒药工具',
     description: '**属性：** 智力\n**重量：** 2磅\n**操作：** 侦测有毒物件（DC10）\n**制造：** 基础毒药',
   },
   {
-    id: 'thieves\' tools', 
+    id: 'thieves tools', 
     name: '盗贼工具',
     description: '**属性：** 敏捷\n**重量：** 1磅\n**操作：** 撬锁（DC15），或解除陷阱（DC15）',
   },
 ]
 
+
+export const tools: Tools[] = [
+  {
+    id: 'artisan tools',
+    name: '工匠工具',
+    description: '一套包含特定工匠工具的工具包',
+  },
+  {
+    id: 'gaming set',
+    name: '赌具',
+    description: '一套赌具。\n**属性：** 感知\n**重量：** —\n**操作：** 判断某人是否作弊（DC10），或赢取游戏（DC20）',
+  },
+  {
+    id: 'musical instruments',
+    name: '乐器',
+    description: '一把特定种类的乐器。\n**属性：** 魅力\n**操作：** 演奏一个熟知的曲调（DC10），或是演奏一首即兴的乐曲（DC15）',
+  },
+  ...otherTools,
+]

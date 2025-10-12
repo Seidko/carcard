@@ -21,16 +21,18 @@ export default function Edition() {
   const editionButton = (e: string, expansion: string) => {
     return () => {
       if (!edition.value.edition) {
-        setters.forEach(set => set((state: WritableDraft<StepBase>) => {
-          state.status = 'not opened'
+        setters.forEach(set => set((s: WritableDraft<StepBase>) => {
+          s.status = 'not opened'
         }))
       }
 
-      setEdition(state => {
-        state.name = '版本: ' + e
-        state.value.edition = e
-        if (!state.value.expansions.includes(expansion)) state.value.expansions.push(expansion)
-        else state.value.expansions = state.value.expansions.filter(v => v !== expansion)
+      setEdition(s => {
+        s.name = '版本: ' + e
+        s.value.edition = e
+        s.value.expansions.splice(s.value.expansions.indexOf('PHB2024'), 1)
+        s.value.expansions.splice(s.value.expansions.indexOf('PHB2014'), 1)
+        s.value.expansions.push(expansion)
+        s.status = 'complete'
       })
     }
   }
