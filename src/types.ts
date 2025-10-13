@@ -9,18 +9,6 @@ export interface StepBase {
   value: unknown
 }
 
-interface FromOptions<T> {
-  species?: T
-  background?: T
-  feat?: T[]
-  classes?: T[]
-  subclasses?: T[]
-  other?: {
-    from: string
-    value: T
-  }[]
-}
-
 export interface EditionStep extends StepBase {
   id: 'edition'
   value: {
@@ -61,17 +49,14 @@ export interface AbilityStep extends StepBase {
       results: NTuple6[]
       selected: number
     }
-    base?: Partial<NTuple6>
-  } & FromOptions<{
-    unbound: boolean
-    value: NTuple6
-  }>
+    value: FromOptions<NTuple6>
+  }
 }
 
 export interface FeatStep extends StepBase {
   id: 'feat'
   value: {
-    feats: Omit<FromOptions<Feat[]>, 'feat'>
+    feats: FromOptions<Feat[]>,
   }
 }
 
@@ -146,8 +131,16 @@ export interface Class {
 
 export interface Feat {
   id: string
-  type: 'origin' | 'general' | 'fighting style' | 'epic boon'
+  type: FeatType
 }
+
+export type FromOptions<T> = Map<From, {
+  from: From
+  value: T
+  unbound?: boolean
+}>
+
+export type From = 'base' | 'species' | 'background' | 'feat' | 'class' | 'subclass' | 'other'
 
 export type FeatType = 'origin' | 'general' | 'fighting style' | 'epic boon'
 

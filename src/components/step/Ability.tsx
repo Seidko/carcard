@@ -7,6 +7,8 @@ import { useContextSelector } from "use-context-selector";
 
 const standardArray: NTuple6 = [15, 14, 13, 12, 10, 8]
 
+const fillArray: (value?: number) => NTuple6 = value => Array(6).fill(value ?? 0) as NTuple6
+
 const abilityData: { id: Ability, name: string }[] = [
   { id: 'str', name: '力量' },
   { id: 'dex', name: '敏捷' },
@@ -43,14 +45,15 @@ function ArrayChoice({ index, array }: { index: number, array: NTuple6 }) {
   const [ alertVisible, setAlertVisible ] = useState(false)
 
   const option = Array.from(new Set(array))
+  const base = ability.value.value.get('base')?.value ?? fillArray()
 
   return <>
-    <select value={ability.value.base?.[index] ?? ''} onChange={e => {
+    <select value={base[index]} onChange={e => {
       const value = Number(e.target.value)
-      
+
       const arrCounts = countItem(array)
-      const attrCount = (ability.value.base?.filter(v => v === value).length ?? 0) + 1
-      
+      const attrCount = (base.filter(v => v === value).length ?? 0) + 1
+
       if (arrCounts.get(value)! < attrCount) {
         setAlertVisible(true)
         setTimeout(() => setAlertVisible(false), 2000)
@@ -58,9 +61,13 @@ function ArrayChoice({ index, array }: { index: number, array: NTuple6 }) {
       }
 
       setAbility(s => {
-        if (!s.value.base) s.value.base = Array(6).fill(undefined) as NTuple6
+        let base = s.value.value.get('base')
+        if (!base) {
+          s.value.value.set('base', { from: 'base', value: fillArray() })
+          base = s.value.value.get('base')!
+        }
 
-        s.value.base[index] = value
+        base.value[index] = value
       })}
     }>
       <option value="" hidden>请选择</option>
@@ -72,14 +79,24 @@ function ArrayChoice({ index, array }: { index: number, array: NTuple6 }) {
 
 function PointBuy({ index }: { index: number }) {
   const [ ability, setAbility ] = useContextSelector(StepsContext, s => [...s.ability])
-  const current = ability.value.base?.[index] ?? 8
-  const pointRemain = 27 - (ability.value.base?.reduce((acc, v) => (acc ?? 0) + (v ? pointCosts[v] : 0), 0) ?? 0)
+  const base = ability.value.value.get('base')?.value ?? fillArray()
 
-  console.log(pointRemain, rPointCosts[pointRemain])
+  const current = base[index] ?? 8
+  const pointRemain = 27 - (base.reduce((acc, v) => (acc ?? 0) + (v ? pointCosts[v] : 0), 0) ?? 0)
+
   return <>
-    <input type="number" min={8} max={Math.min(15, rPointCosts[pointRemain + pointCosts[current]])} value={current} onChange={e => setAbility(s => {
-      if (!s.value.base) s.value.base = Array(6).fill(undefined) as NTuple6
-      s.value.base[index] = e.target.value ? Math.min(15, Math.max(8, Number(e.target.value))) : undefined
+    <input type="number" value={current} onChange={e => setAbility(s => {
+      const value = Number(e.target.value)
+      let base = s.value.value.get('base')
+
+      if (!base) {
+          s.value.value.set('base', { from: 'base', value: fillArray() })
+          base = s.value.value.get('base')!
+      }
+
+      if (!Number.isNaN(value)) {
+        base.value[index] = Math.min(Math.min(15, rPointCosts[pointRemain + pointCosts[current]] ?? 15), Math.max(8, value))
+      }
     })} />
   </>
 }
@@ -91,7 +108,7 @@ function PointRolling() {
   if (ability.value.rolls?.results) return <>
     <div>
       掷骰结果：
-      <div>{ability.value.rolls?.results.map((roll, i) => 
+      <div>{ability.value.rolls?.results.map((roll, i) =>
         <div key={i} className={ability.value.rolls?.selected === i ? 'active' : ''} onClick={() => setAbility(s => {
           s.value.rolls!.selected = i
         })}>
@@ -106,7 +123,7 @@ function PointRolling() {
       </div>)}
     </div>
   </>
-  
+
   return <div>
     掷骰次数：
     <input type="number" min={1} value={rollCount} onChange={e => setRollCount(Number(e.target.value))} />
@@ -135,14 +152,24 @@ function PointRolling() {
 function BackgroundBonus() {
   const [bgStep, ability, setAbility] = useContextSelector(StepsContext, s => [s.background[0], ...s.ability])
   const bg = backgroundsData.find(b => b.id === bgStep.value.background)
-  const bgAbility = ability.value.background
+  const bgAbility = ability.value.value.get('background')
 
   const unboundCheckBox = <label>
     <input type="checkbox" checked={bgAbility?.unbound || false} onChange={e => setAbility(s => {
-      if (!s.value.background) s.value.background = { unbound: false, value: Array(6).fill(0) as NTuple6 }
-      s.value.background.unbound = e.target.checked
+      let bgAbility = s.value.value.get('background')
+
+      if (!bgAbility) {
+        s.value.value.set('background', { from: 'background', unbound: e.target.checked, value: fillArray() })
+        bgAbility = s.value.value.get('background')!
+      }
+
+      bgAbility.unbound = e.target.checked
       if (!e.target.checked) {
-        s.value.background.value = Array(6).fill(0) as NTuple6
+        (bg?.ability ?? fillArray()).forEach((v, i) => {
+          if (v === 0) {
+            bgAbility.value[i] = 0
+          }
+        })
       }
     })} />
     允许自由分配加值
@@ -150,10 +177,19 @@ function BackgroundBonus() {
 
   function bgInput(i: number) {
     const remain = 3 - (bgAbility?.value.reduce((a, b) => a + b, 0) ?? 0) + (bgAbility?.value[i] ?? 0)
-    
-    return <input type="number" min={0} max={Math.min(2, remain)} value={bgAbility?.value[i] ?? 0} onChange={ e => setAbility(s => {
-      if (!s.value.background) s.value.background = { unbound: false, value: Array(6).fill(0) as NTuple6 }
-      s.value.background.value[i] = Math.min(2, Math.max(0, Number(e.target.value)))
+
+    return <input type="number"  value={bgAbility?.value[i] ?? 0} onChange={ e => setAbility(s => {
+      const value = Number(e.target.value)
+      let bgAbility = s.value.value.get('background')
+
+      if (!bgAbility) {
+        s.value.value.set('background', { from: 'background', unbound: e.target.checked, value: fillArray() })
+        bgAbility = s.value.value.get('background')!
+      }
+
+      if (!Number.isNaN(value)) {
+        bgAbility.value[i] = Math.min(Math.min(2, remain), Math.max(0, value))
+      }
     })} />
   }
 
@@ -172,14 +208,14 @@ function BackgroundBonus() {
 
   if (!bg) return <><div>未选择背景</div>{unboundCheckBox}</>
 
-  
+
   return <div>
     来自背景 {bg.name} 的加值：
-    { 
+    {
       // maybe undefined but here is PHB2024 only
       bg.ability!.map((v, i) => {
         if (!bgAbility?.unbound && v === 0) return
-        
+
         return <div key={i}>
           {abilityData[i].name}
           { bgInput(i) }
@@ -199,7 +235,7 @@ export default function Ability() {
       case "standard":
         return <>
           <h3>标准序列</h3>
-          <div className='description'>一个固定的序列（{standardArray.join(", ")}）并且将序列中的值不重复地填入角色属性中。本方法是27购点法的平均分配版，如果你需要创建一个熟悉平均，而且dm要求只能使用27购点法，那么这个选项是最合适的。</div>
+          <div className='description'>一个固定的序列（{standardArray.join(", ")}）并且将序列中的值不重复地填入角色属性中。本方法是27购点法的平均分配版，如果你需要创建一个属性平均，而且dm要求只能使用27购点法的角色，那么这个选项是最合适的。</div>
           <div>
             {abilityData.map((a, i) => <div key={a.id}>
               <label>{a.name}：</label>
@@ -208,7 +244,8 @@ export default function Ability() {
           </div>
         </>
       case "point buy": {
-        const pointsUsed = ability.value.base?.reduce((acc, v) => (acc ?? 0) + (v ? pointCosts[v] : 0), 0) ?? 0
+        const base = ability.value.value.get('base')?.value ?? fillArray(8)
+        const pointsUsed = base?.reduce((acc, v) => (acc ?? 0) + (v ? pointCosts[v] : 0), 0) ?? 0
         return <>
           <h3>27购点法</h3>
           <div className='description'>每个属性初始值为8，拥有27点购买点数，可以将属性值提升到15（15点），每提升1点需要消耗的购买点数如下表所示：</div>
@@ -245,21 +282,33 @@ export default function Ability() {
         </>
       }
       case "custom": {
+        const base = ability.value.value.get('base')!.value
+
         return <>
           <h3>自定义</h3>
           <div className='description'>直接输入各属性值。</div>
           <div>
             {abilityData.map((a, i) => <div key={a.id}>
               <label>{a.name}：</label>
-              <input type="number" min={1} max={30} value={ability.value.base?.[i] ?? ''} onChange={e => setAbility(s => {
-                if (!s.value.base) s.value.base = Array(6).fill(undefined) as NTuple6
-                s.value.base[i] = e.target.value ? Math.min(30, Math.max(1, Number(e.target.value))) : undefined
+              <input type="number" value={base[i] ?? ''} onChange={e => setAbility(s => {
+                const value = Number(e.target.value)
+
+                let ability = s.value.value.get('base')
+
+                if (!ability) {
+                  s.value.value.set('base', { from: 'base', unbound: false, value: fillArray(10) })
+                  ability = s.value.value.get('base')!
+                }
+
+                if (!Number.isNaN(value)) {
+                  ability.value[i] = Math.min(30, Math.max(1, value))
+                }
               })} />
             </div>)}
           </div>
         </>
       }
-        
+
       default:
         return
     }
@@ -267,11 +316,11 @@ export default function Ability() {
 
   return <>
     <select value={ability.value.type ?? ''} onChange={e => setAbility(s => {
-      s.value.base = undefined
+      s.value.value.delete('base')
       s.value.type = e.target.value as any
-      if (e.target.value == 'custom') {
+      if (['point buy', 'custom'].includes(e.target.value)) {
         setAbility(s => {
-          s.value.base = [10, 10, 10, 10, 10, 10]
+          s.value.value.set('base', { from: 'base', value: fillArray(8) })
         })
       }
     })}>

@@ -13,6 +13,7 @@ export default function Edition() {
       s.background[1],
       s.ability[1],
       s.species[1],
+      s.feat[1],
       s.skills[1],
       s.about[1],
     ]

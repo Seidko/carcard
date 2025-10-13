@@ -47,15 +47,17 @@ export default function Builder() {
   const ability = useImmer<Type.AbilityStep>({
     id: 'ability',
     name: '属性值',
-    value: {},
+    value: {
+      value: new Map()
+    },
   })
 
   const feat = useImmer<Type.FeatStep>({
     id: 'feat',
     name: '专长',
     value: {
-      feats: {},
-    }
+      feats: new Map(),
+    },
   })
 
   const background = useImmer<Type.BackgroundStep>({
@@ -68,10 +70,10 @@ export default function Builder() {
     id: 'equipment',
     name: '装备',
     value: {
-      weapons: {},
-      armors: {},
-      tools: {},
-      coins: {},
+      weapons: new Map(),
+      armors: new Map(),
+      tools: new Map(),
+      coins: new Map(),
     }
   })
 
@@ -79,13 +81,13 @@ export default function Builder() {
     id: 'skills',
     name: '技能',
     value: {
-      languages: {},
-      weapons: {},
-      armors: {},
-      tools: {},
-      saving: {},
-      skillProficiencies: {},
-      skillExpertise: {},
+      languages: new Map(),
+      weapons: new Map(),
+      armors: new Map(),
+      tools: new Map(),
+      saving: new Map(),
+      skillProficiencies: new Map(),
+      skillExpertise: new Map(),
     },
   })
 

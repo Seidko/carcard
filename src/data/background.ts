@@ -188,7 +188,7 @@ export const backgroundsData: Background[] = [
     ability: [0, 0, 0, 1, 1, 1],
     toolsProficiency: ['calligrapher'],
     skillsProficiency: ['insight', 'religion'],
-    feats: { id: 'magic adept priest', type: 'origin'},
+    feats: { id: 'magic initiate cleric', type: 'origin'},
     equipments: [
       {
         tools: ['calligrapher'],
@@ -229,7 +229,7 @@ export const backgroundsData: Background[] = [
     ability: [0, 1, 1, 0, 1, 0],
     toolsProficiency: ['cartographer'],
     skillsProficiency: ['stealth', 'survival'],
-    feats: { id: 'magic adept druid', type: 'origin'},
+    feats: { id: 'magic initiate druid', type: 'origin'},
     equipments: [
       {
         tools: ['cartographer'],
@@ -329,7 +329,7 @@ export const backgroundsData: Background[] = [
     ability: [0, 0, 1, 1, 1, 0],
     toolsProficiency: ['calligrapher'],
     skillsProficiency: ['arcana', 'history'],
-    feats: { id: 'magic adept wizard', type: 'origin'},
+    feats: { id: 'magic initiate wizard', type: 'origin'},
     equipments: [
       {
         tools: ['calligrapher'],
