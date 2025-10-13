@@ -5,8 +5,73 @@ import { useEffect, useMemo, useState } from 'react'
 import { useContextSelector } from 'use-context-selector'
 import { isClassHasFeatureAtLevel, isCompAvailable } from '@/utils'
 
+function ClassChoice({ cb }: { cb: (id: string) => void }) {
+  const [ edition, classes ] = useContextSelector(StepsContext, v => [
+    v.edition[0],
+    v.classes[0],
+  ])
+
+  const classesDataFiltered = useMemo(() => classesData.filter(c => isCompAvailable(c, edition)), [edition])
+  const classAvailable = classesDataFiltered.filter(c => !classes.value.classes.some(cl => cl.id === c.id))
+
+  return <>
+    <div>→ 选择职业：</div>
+    <ul>
+      {
+        classAvailable.map(v => (
+          <li key={v.id} onClick={() => cb(v.id)}>
+            {v.name}&nbsp;
+          </li>
+        ))
+      }
+    </ul>
+  </>
+}
+
+function ClassComp({ id }: Class) {
+  const [ edition, classes, setClasses ] = useContextSelector(StepsContext, v => [
+    v.edition[0],
+    ...v.classes,
+  ])
+
+  const classesDataFiltered = useMemo(() => classesData.filter(c => isCompAvailable(c, edition)), [edition])
+
+  const [ choiceClass, setChoiceClass ] = useState<boolean>(false)
+  const clazz = classesDataFiltered.find(c => c.id === id)
+  let levelLocal = classes.value.classes.find(c => c.id === id)?.level || 'N/A'
+  
+  if (!clazz) return <div style={{ color: 'red' }}>未知的职业id</div>
+  
+  return <div>
+    <div>
+       { levelLocal } 级 { clazz.name }
+    </div>
+    <div>
+      { classes.value.classes.length && [...Array(20).keys()].map(v => <span key={v + 1} onClick={() => setClasses(s => {
+          s.value.classes.find(c => c.id === id)!.level = v + 1
+          levelLocal = v + 1
+        })}>{v + 1}&nbsp;</span>)}
+    </div>
+    { choiceClass ? <ClassChoice cb={(nid) =>
+      setClasses(s => {
+        const cls = s.value.classes.find(c => c.id === id)
+        if (cls) cls.id = nid
+        setChoiceClass(false)
+      })
+    } /> : classesDataFiltered.length > classes.value.classes.length && <div onClick={() => setChoiceClass(true)}>↻ 更换职业</div> }
+    <div onClick={() => setClasses(s => {
+      s.value.classes = s.value.classes.filter(c => c.id !== id)
+    })}>X 删除职业</div>
+  </div>
+}
+
 export default function Classes() {
-  const [ edition, classes, setClasses, setSubclasses ] = useContextSelector(StepsContext, s => [s.edition[0], ...s.classes, s.subclasses[1] ])
+  const [ edition, classes, setClasses, setSubclasses, setFeats ] = useContextSelector(StepsContext, s => [
+    s.edition[0],
+    ...s.classes,
+    s.subclasses[1],
+    s.feat[1],
+  ])
   const [ newClass, setNewClass ] = useState<boolean>(false)
 
   const classesDataFiltered = useMemo(() => classesData.filter(c => isCompAvailable(c, edition)), [edition])
@@ -21,55 +86,18 @@ export default function Classes() {
         s.status = undefined
       })
     }
+    setFeats(s => {
+      if (classes.value.classes.every(c => c.level < 4)) {
+        s.value.feats.delete('class')
+      } else if (!s.value.feats.get('class')) {
+        s.value.feats.set('class', {
+          from: 'class',
+          value: [],
+        })
+      }
+    })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classes])
-
-  function ClassChoice({ cb }: { cb: (id: string) => void }) {
-    return <>
-      <div>→ 选择职业：</div>
-      <ul>
-        {
-          classesDataFiltered.map(v => (
-            <li key={v.id} onClick={() => cb(v.id)}>
-              {v.name}&nbsp;
-            </li>
-          ))
-        }
-      </ul>
-    </>
-  }
-
-  function ClassComp({ id }: Class) {
-    const [ choiceClass, setChoiceClass ] = useState<boolean>(false)
-    const clazz = classesDataFiltered.find(c => c.id === id)
-    let levelLocal = classes.value.classes.find(c => c.id === id)?.level || 'N/A'
-    
-    if (!clazz) return <div style={{ color: 'red' }}>未知的职业id</div>
-
-    return <div>
-      <div>
-         { levelLocal } 级 { clazz.name }
-      </div>
-      <div>
-        { classes.value.classes.length && [...Array(20).keys()].map(v => <span key={v + 1} onClick={() => 
-          setClasses(s => {
-            s.value.classes.find(c => c.id === id)!.level = v + 1
-            levelLocal = v + 1
-          })
-        }>{v + 1}&nbsp;</span>)}
-      </div>
-      { choiceClass ? <ClassChoice cb={(nid) =>
-        setClasses(s => {
-          const cls = s.value.classes.find(c => c.id === id)
-          if (cls) cls.id = nid
-          setChoiceClass(false)
-        })
-      } /> : classesDataFiltered.length > classes.value.classes.length && <div onClick={() => setChoiceClass(true)}>↻ 更换职业</div> }
-      <div onClick={() => setClasses(s => {
-        s.value.classes = s.value.classes.filter(c => c.id !== id)
-      })}>X 删除职业</div>
-    </div>
-  }
 
 
   return <>

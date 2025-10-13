@@ -18,26 +18,18 @@ const abilityData: { id: Ability, name: string }[] = [
   { id: 'cha', name: '魅力' },
 ]
 
-const pointCosts: Record<string, number> = {
-  '8': 0,
-  '9': 1,
-  '10': 2,
-  '11': 3,
-  '12': 4,
-  '13': 5,
-  '14': 7,
-  '15': 9,
+const pointCosts: (level: number) => number = level => {
+  if (level < 8) return 0
+  else if (level <= 13) return level - 8
+  else if (level <= 15) return (level - 13) * 2 + 5
+  else return 9
 }
 
-const rPointCosts: Record<string, number> = {
-  '0': 8,
-  '1': 9,
-  '2': 10,
-  '3': 11,
-  '4': 12,
-  '5': 13,
-  '7': 14,
-  '9': 15,
+const costsPoint: (point: number) => number = point => {
+  if (point < 0) return 0
+  else if (point <= 5) return point + 8
+  else if (point <= 9) return Math.floor((point - 5) / 2) + 14
+  else return 15
 }
 
 function ArrayChoice({ index, array }: { index: number, array: NTuple6 }) {
@@ -79,23 +71,32 @@ function ArrayChoice({ index, array }: { index: number, array: NTuple6 }) {
 
 function PointBuy({ index }: { index: number }) {
   const [ ability, setAbility ] = useContextSelector(StepsContext, s => [...s.ability])
-  const base = ability.value.value.get('base')?.value ?? fillArray()
+  const base = ability.value.value.get('base')?.value ?? fillArray(8)
 
   const current = base[index] ?? 8
-  const pointRemain = 27 - (base.reduce((acc, v) => (acc ?? 0) + (v ? pointCosts[v] : 0), 0) ?? 0)
+  const pointRemain = 27 - (base.reduce((acc, v) => (acc ?? 0) + (v ? pointCosts(v) : 0), 0) ?? 0)
+  const maxPoint = Math.min(15, costsPoint(pointRemain + pointCosts(current)) ?? 15)
 
   return <>
-    <input type="number" value={current} onChange={e => setAbility(s => {
+    <input type="number" min={8} max={maxPoint} value={current} onChange={e => setAbility(s => {
       const value = Number(e.target.value)
       let base = s.value.value.get('base')
 
       if (!base) {
-          s.value.value.set('base', { from: 'base', value: fillArray() })
+          s.value.value.set('base', { from: 'base', value: fillArray(8) })
           base = s.value.value.get('base')!
       }
 
       if (!Number.isNaN(value)) {
-        base.value[index] = Math.min(Math.min(15, rPointCosts[pointRemain + pointCosts[current]] ?? 15), Math.max(8, value))
+        base.value[index] = value
+      }
+    })} onBlur={e => setAbility(s => {
+      console.log(e)
+      const base = s.value.value.get('base')!
+      
+
+      if (base) {
+        base.value[index] = Math.min(maxPoint, Math.max(8, base.value[index]))
       }
     })} />
   </>
@@ -178,7 +179,7 @@ function BackgroundBonus() {
   function bgInput(i: number) {
     const remain = 3 - (bgAbility?.value.reduce((a, b) => a + b, 0) ?? 0) + (bgAbility?.value[i] ?? 0)
 
-    return <input type="number"  value={bgAbility?.value[i] ?? 0} onChange={ e => setAbility(s => {
+    return <input type="number" value={bgAbility?.value[i] ?? 0} onChange={ e => setAbility(s => {
       const value = Number(e.target.value)
       let bgAbility = s.value.value.get('background')
 
@@ -245,7 +246,8 @@ export default function Ability() {
         </>
       case "point buy": {
         const base = ability.value.value.get('base')?.value ?? fillArray(8)
-        const pointsUsed = base?.reduce((acc, v) => (acc ?? 0) + (v ? pointCosts[v] : 0), 0) ?? 0
+        const pointsUsed = base?.reduce((acc, v) => (acc ?? 0) + (v ? pointCosts(v) : 0), 0) ?? 0
+
         return <>
           <h3>27购点法</h3>
           <div className='description'>每个属性初始值为8，拥有27点购买点数，可以将属性值提升到15（15点），每提升1点需要消耗的购买点数如下表所示：</div>
@@ -257,10 +259,14 @@ export default function Ability() {
               </tr>
             </thead>
             <tbody>
-              {Object.keys(pointCosts).map(v => <tr key={v}>
-                <td>{v}</td>
-                <td>{pointCosts[v]}</td>
-              </tr>)}
+              {
+                [...Array(8).keys()].map(i => i + 8).map(v => (
+                  <tr key={v}>
+                    <td>{v}</td>
+                    <td>{pointCosts(v)}</td>
+                  </tr>
+                ))
+              }
             </tbody>
           </table>
           <div>
@@ -270,7 +276,7 @@ export default function Ability() {
             </div>)}
           </div>
           <div>
-            点数：<span style={{ color: pointsUsed > 27 ? 'red' : 'inherit' }}>{pointsUsed}</span> / 27
+            点数：<span style={{ color: pointsUsed > 27 ? 'red' : 'inherit' }}>{pointsUsed === Infinity ? '不在范围内的点数' : pointsUsed}</span> / 27
           </div>
         </>
       }
@@ -290,7 +296,7 @@ export default function Ability() {
           <div>
             {abilityData.map((a, i) => <div key={a.id}>
               <label>{a.name}：</label>
-              <input type="number" value={base[i] ?? ''} onChange={e => setAbility(s => {
+              <input type="number" min={1} max={30} value={base[i] ?? ''} onChange={e => setAbility(s => {
                 const value = Number(e.target.value)
 
                 let ability = s.value.value.get('base')
@@ -301,7 +307,12 @@ export default function Ability() {
                 }
 
                 if (!Number.isNaN(value)) {
-                  ability.value[i] = Math.min(30, Math.max(1, value))
+                  ability.value[i] = value
+                }
+              })} onBlur={() => setAbility(s => {
+                const base = s.value.value.get('base')
+                if (base) {
+                  base.value[i] = Math.min(30, Math.max(1, base.value[i]))
                 }
               })} />
             </div>)}
