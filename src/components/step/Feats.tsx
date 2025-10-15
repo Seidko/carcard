@@ -1,8 +1,8 @@
 import { backgroundsData } from '@/data/background'
 import { featsData, featsMap } from '@/data/feats'
 import { StepsContext } from '@/structure/Context'
-import type { Feat, FeatType, From, FromOptions } from '@/types'
-import { isCompAvailable } from '@/utils'
+import type { Feat, FeatType, From } from '@/types'
+import { flatArray, isCompAvailable } from '@/utils'
 import type { WritableDraft } from 'immer'
 import { useContextSelector } from 'use-context-selector'
 
@@ -13,10 +13,6 @@ const typeNameMap: Record<FeatType, string> = {
   'epic boon': '传奇恩惠',
 }
 
-function flatValues(options: FromOptions<Feat[]>): Feat[] {
-  return Array.from(options.values().flatMap(v => v.value))
-}
-
 function FeatSelect({ from, type, index }: { from: From, type: FeatType, index?: number }) {
   const [ edition, feats, setFeats ] = useContextSelector(StepsContext, v => [
     v.edition[0],
@@ -24,7 +20,7 @@ function FeatSelect({ from, type, index }: { from: From, type: FeatType, index?:
   ])
 
   const featsFiltered = featsData.filter(f => isCompAvailable(f, edition) && f.type === type)
-  const featsSelected = flatValues(feats.value.feats).filter(f => !featsMap.get(f.id)?.repeatable).map(f => f.id)
+  const featsSelected = flatArray(feats.value.feats).filter(f => !featsMap.get(f.id)?.repeatable).map(f => f.id)
   let feat = feats.value.feats.get(from)?.value[index ?? 0]
 
   if (index === undefined) {

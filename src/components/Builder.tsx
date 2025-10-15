@@ -9,6 +9,7 @@ import Classes from './step/Classes'
 import Ability from './step/Ability'
 import Feats from './step/Feats'
 import Background from './step/Background'
+import Skills from './step/Skills'
 
 export default function Builder() {
   const edition = useImmer<Type.EditionStep>({
@@ -87,7 +88,7 @@ export default function Builder() {
       tools: new Map(),
       saving: new Map(),
       skillProficiencies: new Map(),
-      skillExpertise: new Map(),
+      skillExpertises: new Map(),
     },
   })
 
@@ -129,6 +130,7 @@ export default function Builder() {
       case 'background':
         return <Background />
       case 'skills':
+        return <Skills />
       case 'about':
     }
   }

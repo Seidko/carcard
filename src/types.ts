@@ -85,8 +85,8 @@ export interface SkillsStep extends StepBase {
     armors: FromOptions<string[]>
     tools: FromOptions<string[]>
     saving: FromOptions<string[]>
-    skillProficiencies: FromOptions<string[]>
-    skillExpertise: FromOptions<string[]>
+    skillProficiencies: FromOptions<Set<Skill>>
+    skillExpertises: FromOptions<Set<Skill>>
   }
 }
 
@@ -147,3 +147,5 @@ export type FeatType = 'origin' | 'general' | 'fighting style' | 'epic boon'
 export type Spellcasting = 'full' | 'half' | 'third' | 'pact' | 'none'
 
 export type Ability = 'str' | 'dex' | 'con' | 'int' | 'wis' | 'cha'
+
+export type Skill = 'acrobatics' | 'animal handling' | 'arcana' | 'athletics' | 'deception' | 'history' | 'insight' | 'intimidation' | 'investigation' | 'medicine' | 'nature' | 'perception' | 'performance' | 'persuasion' | 'religion' | 'sleight of hand' | 'stealth' | 'survival'

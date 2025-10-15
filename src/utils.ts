@@ -1,10 +1,22 @@
 import type { ClassData } from './data/classes'
-import type { EditionStep } from './types'
+import type { Ability, EditionStep, FromOptions, NTuple6 } from './types'
 
 export function isCompAvailable(classData: { from: string | string[] }, edition: EditionStep) {
   return Array.isArray(classData.from)
     ? classData.from.some(e => edition.value.expansions.includes(e))
     : edition.value.expansions.includes(classData.from)
+}
+
+export function flatArray<T>(options: FromOptions<T[]>): T[] {
+  return Array.from(Iterator.from(options.values()).flatMap(v => v.value))
+}
+
+export function flatSet<T>(options: FromOptions<Set<T>>): Set<T> {
+  return new Set(Array.from(Iterator.from(options.values()).flatMap(v => Array.from(v.value))))
+}
+
+export function flatAbilities(options: FromOptions<NTuple6>): NTuple6 {
+  return Array.from(Iterator.from(options.values()).map(v => v.value)).reduce((a, b) => a.map((x, i) => x + b[i]) as NTuple6, [0, 0, 0, 0, 0, 0] as NTuple6)
 }
 
 export function isClassHasFeatureAtLevel(classData: ClassData, level: number, feature: string): boolean {
@@ -51,3 +63,12 @@ export function countItem<T>(arr: T[]): Map<NonNullable<T>, number> {
     return acc
   }, new Map<NonNullable<T>, number>())
 }
+
+export const abilityData: { id: Ability, name: string }[] = [
+  { id: 'str', name: '力量' },
+  { id: 'dex', name: '敏捷' },
+  { id: 'con', name: '体质' },
+  { id: 'int', name: '智力' },
+  { id: 'wis', name: '感知' },
+  { id: 'cha', name: '魅力' },
+]

@@ -1,5 +1,4 @@
-import type { FeatType, Spellcasting } from '@/types'
-import type { Ability, Skill } from './skills'
+import type { FeatType, Spellcasting, Ability, Skill } from '@/types'
 
 export interface Level {
   level: number
@@ -23,7 +22,7 @@ export interface ClassData {
   savingThrows: Ability[]
   skills: {
     choices: number
-    options: Skill[] | 'any'
+    options?: Skill[]
   }
   armor: string[]
   weapons: {
@@ -64,7 +63,7 @@ export interface ClassData {
       }
       skills?: {
         choices: number
-        options: Skill[] | 'any'
+        options?: Skill[]
       }
     }
   }
@@ -145,7 +144,7 @@ export const classesData: ClassData[] = [
 
 > **伤害抗性Damage Resistance。**你具有钝击、穿刺、挥砍伤害的抗性。  
 > **狂暴伤害Rage Damage。**当你使用力量发动一次攻击（无论这是一次武器攻击还是一次徒手打击）并对目标造成伤害时，你的伤害掷骰获得额外加值，这个加值随着你的野蛮人等级提升，见野蛮人特性表中狂暴伤害一栏。  
-> **力量优势Strength Advantage。**你的力量检定和力量豁免检定具有优势。  
+> **力量优势str Advantage。**你的力量检定和力量豁免检定具有优势。  
 > **无法专注或施法No Concentration or Spells。**你无法保持专注，也不能施展法术。  
 > **持续时间Duration。**狂暴持续至你的下个回合结束，如果你穿戴重甲或陷入失能状态，狂暴提前结束。如果在你的下一回合狂暴仍处于激活状态，你可以通过以下的任一方式令狂暴延长一轮：
 > 
@@ -237,8 +236,8 @@ export const classesData: ClassData[] = [
     from: 'PHB2024',
     name: '野蛮人',
     hitDie: 12,
-    primaryAbility: ['strength'],
-    savingThrows: ['strength', 'constitution'],
+    primaryAbility: ['str'],
+    savingThrows: ['str', 'con'],
     skills: {
       choices: 2,
       options: ['athletics', 'animal handling', 'intimidation', 'nature', 'perception', 'survival'],
@@ -264,7 +263,7 @@ export const classesData: ClassData[] = [
     ],
 
     multiclassing: {
-      requirements: ['strength'],
+      requirements: ['str'],
       proficiencies: {
         armor: ['盾牌'],
         weapons: ['军用'],
@@ -275,7 +274,7 @@ export const classesData: ClassData[] = [
       {
         level: 1,
         features: [
-          '### 狂暴 Rage\n你可以将名为狂暴的原初之力赋予己身，为你带来超越常规的伟力和韧性。未着装重甲时，你能够以一个附赠动作进入狂暴。\n你可以进入狂暴的次数见野蛮人特性表中狂暴一栏。当你完成一次**短休**时，你重获一次已消耗的使用次数；当你完成一次**长休**时，你重获所有已消耗的使用次数。\n狂暴激活期间，你将遵循以下这些规则：\n\n**伤害抗性Damage Resistance。** 你具有钝击、穿刺、挥砍伤害的抗性。\n\n**狂暴伤害Rage Damage。** 当你使用力量发动一次攻击（无论这是一次武器攻击还是一次徒手打击）并对目标造成伤害时，你的伤害掷骰获得额外加值，这个加值随着你的野蛮人等级提升，见野蛮人特性表中狂暴伤害一栏。\n\n**力量优势Strength Advantage。** 你的力量检定和力量豁免检定具有**优势**。\n\n**无法专注或施法No Concentration or Spells。** 你无法保持**专注**，也不能施展法术。\n\n**持续时间Duration。** 狂暴持续至你的下个回合结束，如果你穿戴重甲或陷入**失能**状态，狂暴提前结束。如果在你的下一回合狂暴仍处于激活状态，你可以通过以下的任一方式令狂暴延长一轮：\n- 对一名敌人进行一次攻击检定。\n- 迫使一名敌人进行一次豁免检定。\n- 以一个附赠动作延长你的狂暴。\n\n每当狂暴被延长，都会持续至你的下个回合结束。你至多可以维持狂暴10分钟。',
+          '### 狂暴 Rage\n你可以将名为狂暴的原初之力赋予己身，为你带来超越常规的伟力和韧性。未着装重甲时，你能够以一个附赠动作进入狂暴。\n你可以进入狂暴的次数见野蛮人特性表中狂暴一栏。当你完成一次**短休**时，你重获一次已消耗的使用次数；当你完成一次**长休**时，你重获所有已消耗的使用次数。\n狂暴激活期间，你将遵循以下这些规则：\n\n**伤害抗性Damage Resistance。** 你具有钝击、穿刺、挥砍伤害的抗性。\n\n**狂暴伤害Rage Damage。** 当你使用力量发动一次攻击（无论这是一次武器攻击还是一次徒手打击）并对目标造成伤害时，你的伤害掷骰获得额外加值，这个加值随着你的野蛮人等级提升，见野蛮人特性表中狂暴伤害一栏。\n\n**力量优势str Advantage。** 你的力量检定和力量豁免检定具有**优势**。\n\n**无法专注或施法No Concentration or Spells。** 你无法保持**专注**，也不能施展法术。\n\n**持续时间Duration。** 狂暴持续至你的下个回合结束，如果你穿戴重甲或陷入**失能**状态，狂暴提前结束。如果在你的下一回合狂暴仍处于激活状态，你可以通过以下的任一方式令狂暴延长一轮：\n- 对一名敌人进行一次攻击检定。\n- 迫使一名敌人进行一次豁免检定。\n- 以一个附赠动作延长你的狂暴。\n\n每当狂暴被延长，都会持续至你的下个回合结束。你至多可以维持狂暴10分钟。',
           '### 无甲防御 Unarmored Defense\n若你未着装任何护甲，你的基础**护甲等级**等于10+你的敏捷调整值+你的体质调整值。你可以使用盾牌并仍从此特性获益。',
           '### 武器精通 Weapon Mastery\n你对武器的训练使你能够运用两种自选的简易或军用近战武器的精通词条，例如巨斧和手斧。每当你完成一次**长休**时，你可以重新演练武器技巧，来改变你所选择的其中一个武器类型。\n当你到达特定的野蛮人等级时，你还可以使用更多种类武器的精通词条，详见野蛮人特性表中武器精通一栏。',
         ],
@@ -539,11 +538,10 @@ export const classesData: ClassData[] = [
     from: 'PHB2024',
     name: '吟游诗人',
     hitDie: 8,
-    primaryAbility: ['strength'],
-    savingThrows: ['strength', 'constitution'],
+    primaryAbility: ['str'],
+    savingThrows: ['str', 'con'],
     skills: {
       choices: 3,
-      options: 'any',
     },
     weapons: ['simple'],
     armor: ['light'],
@@ -553,7 +551,7 @@ export const classesData: ClassData[] = [
     },
 
     spellcasting: 'full',
-    spellcastingAbility: 'charisma',
+    spellcastingAbility: 'cha',
 
     description: '吟游诗人以音乐、舞蹈和诗歌唤起魔法，他们是鼓舞同伴、减轻伤痛、挫敌士气、创造幻象的专家。吟游诗人相信多元宇宙是因言语而化虚为实的，其创生圣言的残响依旧在各个存在位面之间回荡闪烁。诗人的魔法便是尝试利用那些超越任何语言的圣言。\n任何事物都可能成为创作新歌曲或是新故事的灵感，因此吟游诗人几乎沉浸于一切事物。他们在各个领域都钻研至深，无论是音乐表演、研习魔法还是单纯地找乐子。\n吟游诗人的生活与普通艺人没什么两样，充斥着旅行各地、收集传说、讲述故事然后靠着观众的打赏生活。但渊博的知识与对魔法的运用让吟游诗人与众不同。',
 
@@ -573,12 +571,11 @@ export const classesData: ClassData[] = [
     ],
 
     multiclassing: {
-      requirements: ['charisma'],
+      requirements: ['cha'],
       proficiencies: {
         armor: ['light'],
         skills: {
           choices: 1,
-          options: 'any',
         },
         tools: {
           choices: 1,

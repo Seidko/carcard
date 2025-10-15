@@ -6,21 +6,36 @@ import Markdown from 'react-markdown'
 import { useContextSelector } from 'use-context-selector'
 
 export default function Background() {
-  const [edt, bg, setBgStep, setFeatStep] = useContextSelector(StepsContext, v => [
+  const [edt, bg, setBgStep, setFeatStep, setSkillsStep] = useContextSelector(StepsContext, v => [
     v.edition[0],
     ...v.background,
-    v.feat[1]
+    v.feat[1],
+    v.skills[1]
   ])
 
   const bgFiltered = useMemo(() => backgroundsData.filter(b => isCompAvailable(b, edt)), [edt])
   const selectedBg = bgFiltered.find(b => b.id === bg.value.background)
 
   const setBg = (bg?: string) => {
-    const bgData = bgFiltered.find(b => b.id === bg)!
-
     setBgStep(s => {
       s.value.background = bg
     })
+
+    const bgData = bgFiltered.find(b => b.id === bg)!
+
+    if (!bg) {
+      setFeatStep(s => {
+        if (!s.value.feats.get('background')?.unbound) {
+          s.value.feats.delete('background')
+        }
+      })
+      setSkillsStep(s => {
+        if (!s.value.skillProficiencies.get('background')?.unbound) {
+          s.value.skillProficiencies.delete('background')
+        }
+      })
+      return
+    }
 
     if (bgData?.feats) {
       setFeatStep(s => {
@@ -51,6 +66,23 @@ export default function Background() {
         }
       })
     }
+
+    if (bgData?.skillsProficiency) {
+      setSkillsStep(s => {
+        const skillFromBg = s.value.skillProficiencies.get('background')
+
+        if (!skillFromBg) {
+          s.value.skillProficiencies.set('background', {
+            from: 'background',
+            value: new Set(bgData.skillsProficiency)
+          })
+        } else if (skillFromBg.unbound) {
+          // do nothing
+        } else {
+          skillFromBg.value = new Set(bgData.skillsProficiency)
+        }
+      })
+    }
   }
 
   return <>
@@ -58,7 +90,7 @@ export default function Background() {
     { selectedBg ? <>
         <div>背景：{ selectedBg.name || '未知背景' } </div>
         <Markdown >{selectedBg.description}</Markdown>
-        <div onClick={() => setBg(undefined)}>↻更换背景</div>
+        <div onClick={() => setBg()}>↻更换背景</div>
       </>
       : 
       <ul>

@@ -1,6 +1,6 @@
 import type { FeatType, NTuple6 } from '@/types'
 
-export interface Feat {
+export interface FeatData {
   id: string
   name: string
   type: FeatType  
@@ -476,7 +476,7 @@ _你获得以下增益：
     
 *   **精通词条Mastery Property。**你对武器的训练让你能够使用你自选的一种简单或军用武器的精通词条，前提是你熟练于该种武器。每当你完成一次长休，你能将所选的武器种类替换为你熟练的另一种武器。
 */
-export const generalFeatsData: Feat[] = [
+export const generalFeatsData: FeatData[] = [
   {
     id: 'ability score improvement',
     name: '属性值提升 Ability Score Improvement',
@@ -818,7 +818,7 @@ export const generalFeatsData: Feat[] = [
   }
 ]
 
-export const originFeatsData: Feat[] = [
+export const originFeatsData: FeatData[] = [
   {
     id: 'alert',
     name: '警戒 Alert',
@@ -908,4 +908,4 @@ export const originFeatsData: Feat[] = [
 
 export const featsData = [...generalFeatsData, ...originFeatsData]
 
-export const featsMap  = new Map<string, Feat>(featsData.map(i => [i.id, i]))
+export const featsMap  = new Map<string, FeatData>(featsData.map(i => [i.id, i]))
