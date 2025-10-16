@@ -19,8 +19,8 @@ type AvailableProficiency = {
 const proExpFeat = ['keen mind', 'observant']
 
 class AvailableProficiencies extends Array<AvailableProficiency> {
-  bestSource(id: Skill, current: Set<Skill>): AvailableProficiency | undefined {
-    let from: AvailableProficiency | undefined
+  bestSolution(current: Set<Skill>): Map<Skill, AvailableProficiency> | undefined {
+    const source: Map<Skill, AvailableProficiency> = new Map()
     const limited = this.filter(v => v.limit)
     const unlimited = this.filter(v => !v.limit).map(v => ({...v}))
 
@@ -31,7 +31,7 @@ class AvailableProficiencies extends Array<AvailableProficiency> {
       })
     })
   
-    const reduce = skillsData.map(s => [s.id, (freq.get(s.id) || 0) + 1] as [Skill, number]).sort((a, b) => a[1] - b[1]).filter(v => current.has(v[0]) || v[0] === id)
+    const reduce = skillsData.map(s => [s.id, (freq.get(s.id) || 0) + 1] as [Skill, number]).sort((a, b) => a[1] - b[1]).filter(v => current.has(v[0]))
 
     const single = reduce.filter(v => v[1] === 1)
 
@@ -49,13 +49,13 @@ class AvailableProficiencies extends Array<AvailableProficiency> {
       s.count = Math.max(0, s.count - single.length)
       const drop = single.splice(0, count)
       
-      if (drop.find(v => v[0] === id)) {
-        from ??= s
+      for (const [d] of drop) {
+        source.set(d, s)
       }
     }
 
-    const sourceSortByMinimumOverlap = limited.map(v => {
-      const overlap = v.limit!.filter(s => freq.get(s)! > 1).length
+    const sourceOverlap = limited.map(v => {
+      const overlap = v.limit!.filter(s => reduce.find(r => r[0] === s)).length
       return {
         source: {...v},
         overlap,
@@ -67,7 +67,9 @@ class AvailableProficiencies extends Array<AvailableProficiency> {
       if (!proExpFeat.includes(a.source.feat!) && proExpFeat.includes(b.source.feat!)) return -1
 
       return a.overlap - b.overlap
-    }).map(v => v.source)
+    })
+
+    const sourceSortByMinimumOverlap = sourceOverlap.map(v => v.source)
 
     { 
       const index= sourceSortByMinimumOverlap.findIndex(v => proExpFeat.includes(v.feat!))
@@ -79,15 +81,15 @@ class AvailableProficiencies extends Array<AvailableProficiency> {
         if (v.limit?.includes(s[0]) && v.count > 0) {
           reduce.splice(reduce.indexOf(s), 1)
           v.count -= 1
-          if (s[0] === id) {
-            from ??= v
+          if (!source.has(s[0])) {
+            source.set(s[0], v)
           }
           break
         } else if (!v.limit && v.count > 0) {
           reduce.splice(reduce.indexOf(s), 1)
           v.count -= 1
-          if (s[0] === id) {
-            from ??= v
+          if (!source.has(s[0])) {
+            source.set(s[0], v)
           }
           break
         }
@@ -95,8 +97,15 @@ class AvailableProficiencies extends Array<AvailableProficiency> {
     }
 
     if (reduce.length <= 0) {
-      return from
+      return source
     }
+  }
+
+  bestSource(id: Skill, current: Set<Skill>): AvailableProficiency | undefined {
+    current = new Set(current)
+    current.add(id)
+    const solution = this.bestSolution(current)
+    return solution?.get(id)
   }
 
   bestSourceName(id: Skill, current: Set<Skill>): string {
@@ -390,16 +399,24 @@ export default function Skills() {
                   onChange={e => {
                     setSkills(s => {
                       if (e.target.checked) {
-                        const bestSource = availableProficiencies.bestSource(skill.id, flatSet(s.value.skillProficiencies))
-                        console.log(skill.id, bestSource)
-                        if (bestSource) {
-                          const draft = s.value.skillProficiencies.get(bestSource.from)
+                        const current = new Set(pro)
+                        current.add(skill.id)
+                        const bestSolution = availableProficiencies.bestSolution(current)
+                        if (!bestSolution) {
+                          return
+                        }
+
+                        for (const v of s.value.skillExpertises.values()) {
+                          v.value.clear()
+                        }
+                        for (const [sId, source] of bestSolution) {
+                          const draft = s.value.skillProficiencies.get(source.from)
                           if (draft) {
-                            draft.value.add(skill.id)
+                            draft.value.add(sId)
                           } else {
-                            s.value.skillProficiencies.set(bestSource.from, {
-                              from: bestSource.from,
-                              value: new Set([skill.id]),
+                            s.value.skillProficiencies.set(source.from, {
+                              from: source.from,
+                              value: new Set([sId]),
                             })
                           }
                         }
@@ -426,7 +443,7 @@ export default function Skills() {
                         })
                       })
                     }
-                  }} />
+                  }} /> {availableProficiencies.bestSourceName(skill.id, pro)}
               </td>
               <td>
                 {
@@ -439,15 +456,24 @@ export default function Skills() {
                       onChange={e => {
                         setSkills(s => {
                           if (e.target.checked) {
-                            const bestSource = availableExpertises.bestSource(skill.id, flatSet(s.value.skillExpertises))
-                            if (bestSource) {
-                              const draft = s.value.skillExpertises.get(bestSource.from)
+                            const current = new Set(pro)
+                            current.add(skill.id)
+                            const bestSolution = availableExpertises.bestSolution(current)
+                            if (!bestSolution) {
+                              return
+                            }
+                            
+                            for (const v of s.value.skillExpertises.values()) {
+                              v.value.clear()
+                            }
+                            for (const [sId, source] of bestSolution) {
+                              const draft = s.value.skillExpertises.get(source.from)
                               if (draft) {
-                                draft.value.add(skill.id)
+                                draft.value.add(sId)
                               } else {
-                                s.value.skillExpertises.set(bestSource.from, {
-                                  from: bestSource.from,
-                                  value: new Set([skill.id]),
+                                s.value.skillExpertises.set(source.from, {
+                                  from: source.from,
+                                  value: new Set([sId]),
                                 })
                               }
                             }
@@ -465,7 +491,7 @@ export default function Skills() {
                       }} 
                     /> :
                     <input type="checkbox" disabled title="需要先选择熟练" />
-                }
+                } {availableExpertises.bestSourceName(skill.id, exp)}
               </td>
               <td>{
                 modifier[abilityData.findIndex(a => a.id === skill.attribute)] +
