@@ -130,13 +130,15 @@ class AvailableProficiencies extends Array<AvailableProficiency> {
     return !!bestSource
   }
 
-  sourceUsedBy(source: Pick<AvailableProficiency, 'from' | 'class' | 'feat' | 'background'>, current: Set<Skill>): Skill | undefined {
-    for (const skill of current) {
-      const bestSource = this.bestSource(skill, current)
-      if (bestSource && bestSource.from === source.from && bestSource.class === source.class && bestSource.feat === source.feat && bestSource.background === source.background) {
-        return skill
+  sourceUsedBy(source: Pick<AvailableProficiency, 'from' | 'class' | 'feat' | 'background'>, current: Set<Skill>): Set<Skill> {
+    const bestSource = this.bestSolution(current)
+    const result = new Set<Skill>()
+    for (const [sId, s] of bestSource || []) {
+      if (s.from === source.from && s.class === source.class && s.feat === source.feat && s.background === source.background) {
+        result.add(sId)
       }
     }
+    return result
   }
 }
 
@@ -319,9 +321,10 @@ export default function Skills() {
   })
 
   proExpFeat.forEach(v => {
-    if (availableExpertises.sourceUsedBy({ from: 'feat', feat: v }, flatSet(skills.value.skillExpertises))) {
+    // Temporary solution, didn't work for multiple same source
+    if (availableExpertises.sourceUsedBy({ from: 'feat', feat: v }, flatSet(skills.value.skillExpertises)).size) {
       availableProficiencies.splice(availableProficiencies.findIndex(p => p.from === 'feat' && p.feat === v), 1)
-    } else if (availableProficiencies.sourceUsedBy({ from: 'feat', feat: v }, flatSet(skills.value.skillProficiencies))) {
+    } else if (availableProficiencies.sourceUsedBy({ from: 'feat', feat: v }, flatSet(skills.value.skillProficiencies)).size) {
       availableExpertises.splice(availableExpertises.findIndex(p => p.from === 'feat' && p.feat === v), 1)
     }
   })
@@ -406,7 +409,7 @@ export default function Skills() {
                           return
                         }
 
-                        for (const v of s.value.skillExpertises.values()) {
+                        for (const v of s.value.skillProficiencies.values()) {
                           v.value.clear()
                         }
                         for (const [sId, source] of bestSolution) {
@@ -456,7 +459,7 @@ export default function Skills() {
                       onChange={e => {
                         setSkills(s => {
                           if (e.target.checked) {
-                            const current = new Set(pro)
+                            const current = new Set(exp)
                             current.add(skill.id)
                             const bestSolution = availableExpertises.bestSolution(current)
                             if (!bestSolution) {
