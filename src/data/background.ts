@@ -1,6 +1,5 @@
-import type { Feat, NTuple6 } from '@/types'
+import type { Feat, NTuple6, Skill } from '@/types'
 import type { Equipments } from './equipments'
-import type { Skill } from './skills'
 
 export interface Background {
   id: string
