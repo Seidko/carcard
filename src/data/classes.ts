@@ -19,10 +19,10 @@ export interface ClassData {
   name: string
   hitDie: number
   primaryAbility: Ability[]
-  savingThrows: Ability[]
+  savingProficiencies: Ability[]
   skills: {
-    choices: number
-    options?: Skill[]
+    count: number
+    limit?: Skill[]
   }
   armor: string[]
   weapons: {
@@ -30,9 +30,10 @@ export interface ClassData {
     properties?: string[]
   } | string[]
   tools?: {
-    choices: number
-    options: string[]
+    count: number
+    limit: string[]
   }
+  subclass?: boolean
 
   spellcasting: Spellcasting
   spellcastingAbility?: Ability
@@ -58,12 +59,12 @@ export interface ClassData {
         properties?: string[]
       } | string[]
       tools?: {
-        choices: number
-        options: string[]
+        count: number
+        limit: string[]
       }
       skills?: {
-        choices: number
-        options?: Skill[]
+        count: number
+        limit?: Skill[]
       }
     }
   }
@@ -237,10 +238,10 @@ export const classesData: ClassData[] = [
     name: '野蛮人',
     hitDie: 12,
     primaryAbility: ['str'],
-    savingThrows: ['str', 'con'],
+    savingProficiencies: ['str', 'con'],
     skills: {
-      choices: 2,
-      options: ['athletics', 'animal handling', 'intimidation', 'nature', 'perception', 'survival'],
+      count: 2,
+      limit: ['athletics', 'animal handling', 'intimidation', 'nature', 'perception', 'survival'],
     },
     weapons: ['simple', 'martial'],
     armor: ['light', 'medium', 'shield'],
@@ -539,15 +540,15 @@ export const classesData: ClassData[] = [
     name: '吟游诗人',
     hitDie: 8,
     primaryAbility: ['str'],
-    savingThrows: ['str', 'con'],
+    savingProficiencies: ['str', 'con'],
     skills: {
-      choices: 3,
+      count: 3,
     },
     weapons: ['simple'],
     armor: ['light'],
     tools: {
-      choices: 3,
-      options: ['bagpipes', 'drum', 'dulcimer', 'flute', 'horn', 'lute', 'lyre', 'pan flute', 'shawm', 'viol'],
+      count: 3,
+      limit: ['bagpipes', 'drum', 'dulcimer', 'flute', 'horn', 'lute', 'lyre', 'pan flute', 'shawm', 'viol'],
     },
 
     spellcasting: 'full',
@@ -575,11 +576,11 @@ export const classesData: ClassData[] = [
       proficiencies: {
         armor: ['light'],
         skills: {
-          choices: 1,
+          count: 1,
         },
         tools: {
-          choices: 1,
-          options: ['bagpipes', 'drum', 'dulcimer', 'flute', 'horn', 'lute', 'lyre', 'pan flute', 'shawm', 'viol'],
+          count: 1,
+          limit: ['bagpipes', 'drum', 'dulcimer', 'flute', 'horn', 'lute', 'lyre', 'pan flute', 'shawm', 'viol'],
         },
       },
     },

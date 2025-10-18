@@ -19,10 +19,7 @@ export function flatAbilities(options: FromOptions<NTuple6>): NTuple6 {
   return Array.from(Iterator.from(options.values()).map(v => v.value)).reduce((a, b) => a.map((x, i) => x + b[i]) as NTuple6, [0, 0, 0, 0, 0, 0] as NTuple6)
 }
 
-export function isClassHasFeatureAtLevel(classData: ClassData, level: number, feature: string): boolean {
-  if (feature === 'subclass') {
-    return classData.levels.some(lv => lv.level <= level && lv.subclass)
-  }
+export function classFeatureAtLevel(classData: ClassData, level: number, feature: keyof ClassData): boolean {
   return classData.levels.some(lv => lv.level <= level && !!lv?.updateAbleAbilities?.[feature])
 }
 
