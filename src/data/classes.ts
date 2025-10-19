@@ -614,6 +614,98 @@ export const classesData: ClassData[] = [
         ],
         feat: 'general',
       },
+      {
+        level: 5,
+        features: [
+          '### 激励之源 Font of Inspiration\n现在，当你完成一次短休或长休时，你重获所有已消耗的诗人激励使用次数。\n此外，你可以消耗一个法术位（无需动作）来重获一次已消耗的诗人激励使用次数。',
+        ],
+      },
+      {
+        level: 6,
+        features: [
+          '### 子职特性 Subclass Feature\n你获得你所选子职的特性。',
+        ],
+      },
+      {
+        level: 7,
+        features: [
+          '### 反迷惑 Countercharm\n你可以用带有力量的音符或话语来干扰影响心灵的效应。若你或位于你30尺内的一名生物在对抗施加魅惑或恐慌状态的效应的豁免检定中失败，你能够以反应令其重骰这次豁免，这次重骰具有优势。',
+        ],
+      },
+      {
+        level: 8,
+        features: [
+          '### 属性值提升 Ability Score Improvement\n你获得属性值提升专长（见第五章）或其他你满足条件的专长。如吟游诗人特性表所示，你还会在第12，第16级时再次获得本特性。',
+        ],
+        feat: 'general',
+      },
+      {
+        level: 9,
+        features: [
+          '### 专精 Expertise\n当你的吟游诗人等级到达9级时，你再额外获得两项由你选择的你熟练技能的专精。',
+        ],
+      },
+      {
+        level: 10,
+        features: [
+          '### 魔法奥秘 Magical Secrets\n你自各种魔法传说中习得了他们的奥秘。每当你到达一个吟游诗人特性表中准备法术数量有所增加的吟游诗人等级时（包括此等级），你可以从吟游诗人、牧师、德鲁伊和法师的法术列表中选择法术准备（这些法术列表见其职业章节），这些法术对你而言都视作吟游诗人法术。此外，每当你替换本职业的准备法术时，你也可以从这些法术列表中选择替换。',
+        ],
+      },
+      {
+        level: 11,
+        features: [],
+      },
+      {
+        level: 12,
+        features: [
+          '### 属性值提升 Ability Score Improvement\n你获得属性值提升专长（见第五章）或其他你满足条件的专长。如吟游诗人特性表所示，你还会在第16级时再次获得本特性。',
+        ],
+        feat: 'general',
+      },
+      {
+        level: 13,
+        features: [],
+      },
+      {
+        level: 14,
+        features: [
+          '### 子职特性 Subclass Feature\n你获得你所选子职的特性。',
+        ],
+      },
+      {
+        level: 15,
+        features: [],
+      },
+      {
+        level: 16,
+        features: [
+          '### 属性值提升 Ability Score Improvement\n你获得属性值提升专长（见第五章）或其他你满足条件的专长。',
+        ],
+        feat: 'general',
+      },
+      {
+        level: 17,
+        features: [],
+      },
+      {
+        level: 18,
+        features: [
+          '### 先发激励 Superior Inspiration\n当你投掷先攻时，若你的诗人激励使用次数不足两次，你重获已消耗的诗人激励使用次数到两次为止。',
+        ],
+      },
+      {
+        level: 19,
+        features: [
+          '### 传奇恩惠 Epic Boon\n你获得一项传奇恩惠专长（见第五章）或其他一项你选择的适用的专长。推荐选择法术溯回之恩惠。',
+        ],
+        feat: 'epic boon',
+      },
+      {
+        level: 20,
+        features: [
+          '### 创生圣言 Words of Creation\n你掌握了创生圣言的其中两字："生"与"死"。因此，你总是准备了法术律令医疗Power Word Heal和律令死亡Power Word Kill。当你施展这两道法术时，你可以选择第二个生物作为目标，那名生物必须位于第一个目标10尺内。',
+        ],
+      }
     ],
   },
 ]
