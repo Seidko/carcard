@@ -586,12 +586,225 @@ export const classesData: ClassData[] = [
     },
 
     levels: [
+      /*
+吟游诗人法术列表
+戏法（零环吟游诗人法术）
+法术	学派	特殊
+剑刃防护Blade Ward	防护	C
+舞光术Dancing Lights	幻术	C
+交友术Friends	惑控	C
+光亮术Light	塑能	—
+法师之手Mage Hand	咒法	—
+修复术Mending	变化	—
+传讯术Message	变化	—
+次级幻象Minor Illusion	幻术	—
+魔法伎俩Prestidigitation	变化	—
+点点星芒 Starry Wisp	塑能	—
+鸣雷破Thunderclap	塑能	—
+克敌先击True Strike	预言	—
+恶言相加Vicious Mockery	惑控	—
+
+一环吟游诗人法术
+法术	学派	特殊
+化兽为友Animal Friendship	惑控	—
+灾祸术Bane	惑控	C
+魅惑类人Charm Person	惑控	—
+七彩喷射Color Spray	幻术	—
+命令术Command	惑控	—
+通晓语言Comprehend Languages	预言	R
+疗伤术Cure Wounds	防护	—
+侦测魔法Detect Magic	预言	C,R
+易容术Disguise Self	幻术	—
+不谐低语Dissonant Whispers	惑控	—
+妖火Faerie Fire	塑能	C
+羽落术Feather Fall	变化	—
+治愈真言Healing Word	防护	—
+英雄气概Heroism	惑控	C
+鉴定术Identify	预言	R,M
+迷幻手稿Illusory Script	幻术	R,M
+大步奔行Longstrider	变化	—
+无声幻影Silent Image	幻术	C
+睡眠术Sleep	惑控	C
+动物交谈Speak with Animals	预言	R
+塔莎狂笑术Tasha's Hideous Laughter	惑控	C
+雷鸣波Thunderwave	塑能	—
+隐形仆役Unseen Servant	咒法	R
+
+二环吟游诗人法术
+法术	学派	特殊
+援助术Aid	防护	—
+动物信使Animal Messenger	惑控	R
+目盲术/耳聋术Blindness/Deafness	变化	—
+安定心神Calm Emotions	惑控	C
+匕首之云Cloud of Daggers	咒法	C
+疯狂冠冕Crown of Madness	惑控	C
+侦测思想Detect Thoughts	预言	C
+强化属性Enhance Ability	变化	C
+变巨术/缩小术Enlarge / Reduce	变化	C
+注目术Enthrall	惑控	C
+灼热金属Heat Metal	变化	C
+定身类人Hold Person	惑控	C
+隐形术Invisibility	幻术	C
+敲击术Knock	变化	—
+次等复原术Lesser Restoration	防护	—
+动植物定位术Locate Animals or Plants	预言	R
+物件定位术Locate Object	预言	C
+魔嘴术Magic Mouth	幻术	R,M
+镜影术Mirror Image	幻术	—
+魅影之力Phantasmal Force	幻术	C
+识破隐形See Invisibility	预言	—
+粉碎音波Shatter	塑能	—
+沉默术Silence	幻术	C,R
+暗示术Suggestion	惑控	C
+诚实之域Zone of Truth	惑控	—
+
+三环吟游诗人法术
+法术	学派	特殊
+降咒Bestow Curse	死灵	C
+鹰眼术Clairvoyance	预言	C,M
+解除魔法Dispel Magic	防护	—
+恐惧术Fear	幻术	C
+假死术Feign Death	死灵	R
+守卫刻文Glyph of Warding	防护	M
+催眠图纹Hypnotic Pattern	幻术	C
+李欧蒙小屋Leomund's Tiny Hut	塑能	R
+高级幻影Major Image	幻术	C
+群体治愈真言Mass Healing Word	防护	—
+回避侦测Nondetection	防护	M
+植物滋长Plant Growth	变化	—
+短讯术Sending	预言	—
+缓慢术Slow	变化	C
+死者交谈Speak with Dead	死灵	—
+植物交谈Speak with Plants	变化	—
+臭云术Stinking Cloud	咒法	C
+巧言术Tongues	预言	—
+
+四环吟游诗人法术
+法术	学派	特殊
+魅惑怪物Charm Monster	惑控	—
+强迫术Compulsion	惑控	C
+困惑术Confusion	惑控	C
+任意门Dimension Door	咒法	—
+月光涌泉 Fount of Moonlight	塑能	C
+行动自如Freedom of Movement	防护	—
+高等隐形术Greater Invisibility	幻术	C
+幻景Hallucinatory Terrain	幻术	—
+生物定位术Locate Creature	预言	C
+魅影杀手Phantasmal Killer	幻术	C
+变形术Polymorph	变化	C
+
+五环吟游诗人法术
+法术	学派	特殊
+活化物件Animate Objects	变化	C
+启蒙术Awaken	变化	M
+支配类人Dominate Person	惑控	C
+托梦术Dream	幻术	—
+指使术Geas	惑控	—
+高等复原术Greater Restoration	防护	M
+定身怪物Hold Monster	惑控	C
+通晓传奇Legend Lore	预言	M
+群体疗伤术Mass Cure Wounds	防护	—
+假象术Mislead	幻术	C
+篡改记忆Modify Memory	惑控	C
+异界誓缚Planar Binding	防护	M
+死者复活Raise Dead	死灵	M
+拉瑞心灵联结Rary's Telepathic Bond	预言	R
+探知术Scrying	预言	C,M
+伪装术Seeming	幻术	—
+突触静止Synaptic Static	惑控	—
+传送法阵Teleportation Circle	咒法	M
+悠兰德王者威仪Yolande's Regal Presence	惑控	C
+
+六环吟游诗人法术
+法术	学派	特殊
+摄心目光Eyebite	死灵	C
+寻路术Find the Path	预言	C,M
+铜墙铁壁Guards and Wards	防护	M
+英雄宴Hero's Feast	咒法	M
+群体暗示术Mass Suggestion	惑控	—
+奥图迷舞Otto's Irresistible Dance	惑控	C
+预置幻象Programmed Illusion	幻术	M
+真知术True Seeing	预言	M
+
+七环吟游诗人法术
+法术	学派	特殊
+以太化Etherealness	咒法	—
+力场监牢Forcecage	塑能	C,M
+海市蜃楼Mirage Arcane	幻术	—
+魔邓肯豪宅术Mordenkainen's Magnificent Mansion	咒法	M
+魔邓肯之剑Mordenkainen's Sword	塑能	C,M
+律令巩固Power Word Fortify	惑控	—
+虹光喷射Prismatic Spray	塑能	—
+投影术Project Image	幻术	C,M
+再生术Regenerate	变化	—
+复生术Resurrection	死灵	M
+徽记术Symbol	防护	M
+传送术Teleport	咒法	—
+
+八环吟游诗人法术
+法术	学派	特殊
+嫌恶术/关怀术Antipathy/Sympathy	惑控	—
+摧心术Befuddlement	惑控	—
+支配怪物Dominate Monster	惑控	C
+花言巧语Glibness	惑控	—
+心灵屏障Mind Blank	防护	—
+律令震慑Power Word Stun	惑控	—
+
+九环吟游诗人法术
+法术	学派	特殊
+预见术Foresight	预言	—
+律令医疗Power Word Heal	惑控	—
+律令死亡Power Word Kill	惑控	—
+虹光法墙Prismatic Wall	防护	—
+完全变形术True Polymorph	变化	C
+ */
       {
         level: 1,
         features: [
           '### 吟游诗人激励 Bardic Inspiration\n你可以用语言，音乐或舞蹈的形式对他人进行超自然的激励。这种激励的表现形式为数颗d6骰，这些骰子被称为诗人激励骰。',
           '### 施法 Spellcasting\n你从吟游艺术中学会了如何施展法术。施法规则见第七章。下文将详述如何将这些规则应用于吟游诗人法术，吟游诗人法术详见本章后文职业描述中的吟游诗人法术列表。',
         ],
+        spells: {
+          0: [
+            'blade ward',
+            'dancing- lights',
+            'friends',
+            'light',
+            'mage hand',
+            'mending',
+            'message',
+            'minor illusion',
+            'prestidigitation',
+            'starry wisp',
+            'thunderclap',
+            'true strike',
+            'vicious mockery',
+          ],
+          1: [
+            'animal friendship',
+            'bane',
+            'charm person',
+            'color spray',
+            'command',
+            'comprehend languages',
+            'cure wounds',
+            'detect magic',
+            'disguise self',
+            'dissonant whispers',
+            'faerie fire',
+            'feather fall',
+            'healing word',
+            'heroism',
+            'identify',
+            'illusory script',
+            'longstrider',
+            'unseen servant',
+            'sleep',
+            'speak with animals',
+            "tasha's hideous laughter",
+            'thunderwave',
+          ],
+        },
       },
       {
         level: 2,
@@ -605,6 +818,35 @@ export const classesData: ClassData[] = [
         features: [
           '### 吟游诗人子职 Bard Subclass\n你选择获得一项吟游诗人子职：舞蹈学院，魅心学院，逸闻学院或勇气学院 。子职的内容见后文。子职是一种特化，在特定的吟游诗人等级给予你对应的独特能力。此后你将获得你所选的子职所有能力——只要其所需等级不超过你的吟游诗人等级。吟游诗人特性表列出了你从子职中获得新特性的吟游诗人等级。',
         ],
+        spells: {
+          2: [
+            'aid',
+            'animal messenger',
+            'blindness/deafness',
+            'calm emotions',
+            'cloud of daggers',
+            'crown of madness',
+            'detect thoughts',
+            'enhance ability',
+            'enlarge/reduce',
+            'enthrall',
+            'heat metal',
+            'hold person',
+            'invisibility',
+            'knock',
+            'lesser restoration',
+            'locate animals or plants',
+            'locate object',
+            'magic mouth',
+            'mirror image',
+            'phantasmal force',
+            'see invisibility',
+            'shatter',
+            'silence',
+            'suggestion',
+            'zone of truth',
+          ],
+        },
         subclass: true,
       },
       {
@@ -619,6 +861,28 @@ export const classesData: ClassData[] = [
         features: [
           '### 激励之源 Font of Inspiration\n现在，当你完成一次短休或长休时，你重获所有已消耗的诗人激励使用次数。\n此外，你可以消耗一个法术位（无需动作）来重获一次已消耗的诗人激励使用次数。',
         ],
+        spells: {
+          3: [
+            'bestow curse',
+            'clairvoyance',
+            'dispel magic',
+            'fear',
+            'feign death',
+            'glyph of warding',
+            'hypnotic pattern',
+            "leomund's tiny hut",
+            'major image',
+            'mass healing word',
+            'nondetection',
+            'plant growth',
+            'sending',
+            'slow',
+            'speak with dead',
+            'speak with plants',
+            'stinking cloud',
+            'tongues',
+          ],
+        },
       },
       {
         level: 6,
@@ -631,6 +895,21 @@ export const classesData: ClassData[] = [
         features: [
           '### 反迷惑 Countercharm\n你可以用带有力量的音符或话语来干扰影响心灵的效应。若你或位于你30尺内的一名生物在对抗施加魅惑或恐慌状态的效应的豁免检定中失败，你能够以反应令其重骰这次豁免，这次重骰具有优势。',
         ],
+        spells: {
+          4: [
+            'charm monster',
+            'compulsion',
+            'confusion',
+            'dimension door',
+            'fount of moonlight',
+            'freedom of movement',
+            'greater invisibility',
+            'hallucinatory terrain',
+            'locate creature',
+            'phantasmal killer',
+            'polymorph',
+          ],
+        },
       },
       {
         level: 8,
@@ -644,6 +923,29 @@ export const classesData: ClassData[] = [
         features: [
           '### 专精 Expertise\n当你的吟游诗人等级到达9级时，你再额外获得两项由你选择的你熟练技能的专精。',
         ],
+        spells: {
+          5: [
+            'animate objects',
+            'awaken',
+            'dominate person',
+            'dream',
+            'geas',
+            'greater restoration',
+            'hold monster',
+            'legend lore',
+            'mass cure wounds',
+            'mislead',
+            'modify memory',
+            'planar binding',
+            'raise dead',
+            "rary's telepathic bond",
+            'scrying',
+            'seeming',
+            'synaptic static',
+            'teleportation circle',
+            "yolande's regal presence",
+          ],
+        },
       },
       {
         level: 10,
@@ -653,7 +955,17 @@ export const classesData: ClassData[] = [
       },
       {
         level: 11,
-        features: [],
+        spells: {
+          6: [
+            'eyebite',
+            'find the path',
+            'guards and wards',
+            "hero's feast",
+            "otto's irresistible dance",
+            'programmed illusion',
+            'true seeing',
+          ],
+        },
       },
       {
         level: 12,
@@ -664,7 +976,22 @@ export const classesData: ClassData[] = [
       },
       {
         level: 13,
-        features: [],
+        spells: {
+          7: [
+            'etherealness',
+            'forcecage',
+            'mirage arcane',
+            "mordenkainen's magnificent mansion",
+            "mordenkainen's sword",
+            'power word fortify',
+            'prismatic spray',
+            'project image',
+            'regenerate',
+            'resurrection',
+            'symbol',
+            'teleport',
+          ],
+        },
       },
       {
         level: 14,
@@ -674,7 +1001,16 @@ export const classesData: ClassData[] = [
       },
       {
         level: 15,
-        features: [],
+        spells: {
+          8: [
+            'antipathy/sympathy',
+            'befuddlement',
+            'dominate monster',
+            'glibness',
+            'mind blank',
+            'power word stun',
+          ],
+        },
       },
       {
         level: 16,
@@ -685,7 +1021,15 @@ export const classesData: ClassData[] = [
       },
       {
         level: 17,
-        features: [],
+        spells: {
+          9: [
+            'foresight',
+            'power word heal',
+            'power word kill',
+            'prismatic wall',
+            'true polymorph',
+          ],
+        },
       },
       {
         level: 18,
