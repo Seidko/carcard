@@ -12,6 +12,7 @@ export interface StepsContext {
   background: ImmerHook<Type.BackgroundStep>
   equipments: ImmerHook<Type.EquipmentsStep>
   skills: ImmerHook<Type.SkillsStep>
+  spells: ImmerHook<Type.SpellsStep>
   about: ImmerHook<Type.AboutStep>
 }
 
