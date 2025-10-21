@@ -238,7 +238,7 @@ export default function Skills() {
         count: pCount,
         from: 'class',
         class: cls.id,
-        limit: classesData.find(c => c.id === cls.id)?.skills.options,
+        limit: classesData.find(c => c.id === cls.id)?.skills.limit,
       })
     }
     if (eCount > 0) {
