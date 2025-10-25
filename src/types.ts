@@ -90,6 +90,13 @@ export interface SkillsStep extends StepBase {
   }
 }
 
+export interface SpellsStep extends StepBase {
+  id: 'spells'
+  value: {
+    spells: FromOptions<string[]>
+  }
+}
+
 export interface AboutStep extends StepBase {
   id: 'about'
   value: {

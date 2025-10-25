@@ -3,7 +3,7 @@ import { classesData } from '@/data/classes'
 import type { Class } from '@/types'
 import { useEffect, useMemo, useState } from 'react'
 import { useContextSelector } from 'use-context-selector'
-import { isClassHasFeatureAtLevel, isCompAvailable } from '@/utils'
+import { classFeatureAtLevel, isCompAvailable } from '@/utils'
 
 function ClassChoice({ cb }: { cb: (id: string) => void }) {
   const [ edition, classes ] = useContextSelector(StepsContext, v => [
@@ -77,7 +77,7 @@ export default function Classes() {
   const classesDataFiltered = useMemo(() => classesData.filter(c => isCompAvailable(c, edition)), [edition])
 
   useEffect(() => {
-    if (classes.value.classes.some(c => isClassHasFeatureAtLevel(classesDataFiltered.find(v => v.id === c.id)!, c.level, 'subclass'))) {
+    if (classes.value.classes.some(c => classFeatureAtLevel(classesDataFiltered.find(v => v.id === c.id)!, c.level, 'subclass'))) {
       setSubclasses(s => {
         s.status = 'not opened'
       })

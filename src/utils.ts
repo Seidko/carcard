@@ -1,4 +1,4 @@
-import type { ClassData } from './data/classes'
+import type { ClassData, Level } from './data/classes'
 import type { Ability, EditionStep, FromOptions, NTuple6 } from './types'
 
 export function isCompAvailable(classData: { from: string | string[] }, edition: EditionStep) {
@@ -19,8 +19,25 @@ export function flatAbilities(options: FromOptions<NTuple6>): NTuple6 {
   return Array.from(Iterator.from(options.values()).map(v => v.value)).reduce((a, b) => a.map((x, i) => x + b[i]) as NTuple6, [0, 0, 0, 0, 0, 0] as NTuple6)
 }
 
-export function classFeatureAtLevel(classData: ClassData, level: number, feature: keyof ClassData): boolean {
-  return classData.levels.some(lv => lv.level <= level && !!lv?.updateAbleAbilities?.[feature])
+export function classFeatureAtLevel<T extends keyof Level>(classData: ClassData, level: number, feature: T): Level[T] {
+  let result = classData[feature as keyof ClassData] as Level[T]
+  for (const lvl of classData.levels) {
+    if (lvl.level > level) {
+      return result
+    }
+    if (result === undefined) {
+      result = lvl[feature]
+    } else {
+      if (Array.isArray(result)) {
+        result = result.concat(lvl[feature] as any[]) as Level[T]
+      } else if (typeof result === 'object') {
+        result = { ...result, ...(lvl[feature] as object) } as Level[T]
+      } else if (['number', 'string', 'boolean'].includes(typeof lvl[feature])) {
+        result = lvl[feature] as Level[T]
+      }
+    }
+  }
+  return result
 }
 
 export function randInt(min: number, max: number) {

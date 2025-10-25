@@ -92,6 +92,14 @@ export default function Builder() {
     },
   })
 
+  const spells = useImmer<Type.SpellsStep>({
+    id: 'spells',
+    name: '法术',
+    value: {
+      spells: new Map(),
+    },
+  })
+
   const about = useImmer<Type.AboutStep>({
     id: 'about',
     name: '角色信息',
@@ -150,6 +158,7 @@ export default function Builder() {
         background,
         equipments,
         skills,
+        spells,
         about
       }}>
         { main() }
